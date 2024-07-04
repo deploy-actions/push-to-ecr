@@ -1,0 +1,60 @@
+name: Build & Push Docker Image to Amazon ECR 🐳
+description: Github Action to Build & Push Docker Image to Amazon ECR
+branding:
+  icon: anchor
+  color: orange
+
+inputs:
+  repository-name:
+    description: ECR Repository Name
+    required: true
+  image-tag:
+    description: Docker Image Tag
+    required: false
+    default: latest
+  overwrite:
+    description: Overwrites the image, even if the image tag already exists.
+    required: false
+    default: "true"
+  dockerfile-path:
+    description: Relative Path of Dockerfile, relative to the github repository root.
+    required: false
+    default: "."
+
+runs:
+  using: composite
+
+  steps:
+    - shell: bash
+      run: aws sts get-caller-identity >/dev/null 2>&1
+
+    - id: ecr
+      uses: aws-actions/amazon-ecr-login@main
+
+    - shell: bash
+      run: |
+        if ! aws ecr describe-repositories --repository-name ${{ inputs.repository-name }} >/dev/null 2>&1; then
+          aws ecr create-repository --repository-name ${{ inputs.repository-name }}
+          echo "::notice title=ECR Repository Created::${{ steps.ecr.outputs.registry }}/${{ inputs.repository-name }}"
+        fi
+
+        if aws ecr describe-images --repository-name ${{ inputs.repository-name }} --image-ids imageTag=${{ inputs.image-tag }} >/dev/null 2>&1; then
+          if [ "${{ inputs.overwrite }}" == "false" ]; then
+            exit 0
+          fi
+        fi
+
+        IMAGE_URI="${{ steps.ecr.outputs.registry }}/${{ inputs.repository-name }}:${{ inputs.image-tag }}"
+        docker build -t $IMAGE_URI ${{ inputs.dockerfile-path }}
+        docker push $IMAGE_URI
+
+    - id: image
+      shell: bash
+      run: |
+        DIGEST=$(aws ecr describe-images --repository-name ${{ inputs.repository-name }} --image-ids imageTag=${{ inputs.image-tag }} --query 'imageDetails[0].imageDigest' --output text)
+        echo "uri=${{ steps.ecr.outputs.registry }}/${{ inputs.repository-name }}@$DIGEST" >> "$GITHUB_OUTPUT"
+
+outputs:
+  image_uri:
+    description: Docker Image URI
+    value: ${{ steps.image.outputs.uri }}
