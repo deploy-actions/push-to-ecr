@@ -1,4 +1,4 @@
-# Build & Push Docker Image to Amazon ECR 🐳
+# Build and Push Docker Image to Amazon ECR 🐳
 
 ## About
 

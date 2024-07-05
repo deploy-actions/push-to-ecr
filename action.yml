@@ -1,4 +1,4 @@
-name: Build & Push Docker Image to Amazon ECR 🐳
+name: Build and Push Docker Image to Amazon ECR 🐳
 description: Github Action to Build & Push Docker Image to Amazon ECR
 branding:
   icon: anchor
