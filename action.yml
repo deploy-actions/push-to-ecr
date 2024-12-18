@@ -49,7 +49,7 @@ runs:
         fi
 
         IMAGE_URI="${{ steps.ecr.outputs.registry }}/${{ inputs.repository-name }}:${{ inputs.image-tag }}"
-        docker build -t $IMAGE_URI "${{ inputs.dockerfile-name }}" "${{ inputs.dockerfile-path }}"
+        docker build -t $IMAGE_URI -f "${{ inputs.dockerfile-name }}" "${{ inputs.dockerfile-path }}"
         docker push $IMAGE_URI
 
     - id: image
