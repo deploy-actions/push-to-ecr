@@ -37,9 +37,10 @@ If the specified ECR Repository does not exist, create repository.
 
 ## Options
 
-| Name            | Description                                                          | mandatory | Default |
-| --------------- | -------------------------------------------------------------------- | --------- | ------- |
-| repository-name | ECR Repository Name                                                  | ✅        |         |
-| image-tag       | Docker Image Tag                                                     |           | latest  |
-| overwrite       | Overwrites the image, even if the image tag already exists.          |           | true    |
-| dockerfile-path | Relative Path of Dockerfile, relative to the github repository root. |           | .       |
+| Name            | Description                                                          | mandatory | Default    |
+| --------------- | -------------------------------------------------------------------- | --------- | ---------- |
+| repository-name | ECR Repository Name                                                  | ✅        |            |
+| image-tag       | Docker Image Tag                                                     |           | latest     |
+| overwrite       | Overwrites the image, even if the image tag already exists.          |           | true       |
+| dockerfile-path | Relative Path of Dockerfile, relative to the github repository root. |           | .          |
+| dockerfile-name | Dockerfile Name                                                      |           | Dockerfile |
