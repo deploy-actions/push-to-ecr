@@ -2,6 +2,8 @@
 
 ## About
 
+> this project is deprecated. please use [`setup-ecr`](https://github.com/deploy-actions/setup-ecr) and [`Docker build-push-action`](https://github.com/marketplace/actions/docker-build-and-push)
+
 The Action builds and pushes a docker image with the specified image tag.
 
 If the specified ECR Repository does not exist, create repository.
